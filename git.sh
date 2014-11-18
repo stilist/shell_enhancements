@@ -112,11 +112,17 @@ push () {
 switch () {
 	git_in_initialized_repo || return 1
 
+	local branch="$1"
+	# support `switch to foo` in addition to `switch foo`
+	if [ "$branch" = "to" ] ; then :
+		branch="$2"
+	fi
+
 	# http://stackoverflow.com/q/5167957/672403
 	git show-ref --verify --quiet "refs/heads/$1"
 	if [ "$?" -eq "0" ] ; then :
-		git checkout "$1"
+		git checkout "$branch"
 	else
-		git checkout -b "$1"
+		git checkout -b "$branch"
 	fi
 }
