@@ -118,6 +118,11 @@ switch () {
 		branch="$2"
 	fi
 
+	if [ -z "$branch" ] ; then :
+		echo_error "Specify a branch name"
+		return 1
+	fi
+
 	# http://stackoverflow.com/q/5167957/672403
 	git show-ref --verify --quiet "refs/heads/$1"
 	if [ "$?" -eq "0" ] ; then :
