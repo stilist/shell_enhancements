@@ -29,13 +29,14 @@ autopush () {
 branchstat () {
 	git_in_initialized_repo || return 1
 
-	if [ -z "$@" ] ; then :
-		local upstream="master"
-	else
-		local upstream=$1
-	fi
-
 	local branch=$(git_current_branch)
+	local upstream=
+
+	if [ -z "$@" ] ; then :
+		upstream="master"
+	else
+		upstream=$1
+	fi
 
 	if [ -n "$branch" ] ; then :
 		# http://www.cyberciti.biz/faq/linux-unix-appleosx-bsd-bash-passing-variables-to-awk/
@@ -52,16 +53,16 @@ branchstat () {
 deploy () {
 	git_can_push || return 1
 
+	local branch= remote=
+
 	# `deploy to h_prod` (uses current branch)
 	if [ "$1" = "to" ] ; then :
-		local branch=$(git_current_branch)
-		local remote=$2
+		branch=$(git_current_branch)
+		remote=$2
+	# `deploy foo to h_prod`
 	else
-		# `deploy foo to h_prod`
-		if [ "$2" = "to" ] ; then :
-			local branch=$1
-			local remote=$3
-		fi
+		branch=$1
+		remote=$3
 	fi
 
 	if [ -n "$remote" ] ; then :
@@ -73,14 +74,16 @@ deploy () {
 pull () {
 	git_can_push || return 1
 
+	local branch= remote=
+
 	# `pull from h_prod` (uses current branch)
 	if [ "$1" = "from" ] ; then :
-		local branch=$(git_current_branch)
-		local remote=$2
+		branch=$(git_current_branch)
+		remote=$2
 	# `pull master from origin`
 	else
-		local branch=$1
-		local remote=$3
+		branch=$1
+		remote=$3
 	fi
 
 	if [ -n "$remote" ] ; then :
@@ -92,15 +95,17 @@ pull () {
 push () {
 	git_can_push || return 1
 
+	local branch= remote=
+
 	# `push to h_prod` (uses current branch)
 	if [ "$1" = "to" ] ; then :
-		local branch=$(git_current_branch)
-		local remote=$2
+		branch=$(git_current_branch)
+		remote=$2
 	# `push master to origin`
 	# `push production:master to origin` (for cross-branch push)
 	else
-		local branch=$1
-		local remote=$3
+		branch=$1
+		remote=$3
 	fi
 
 	if [ -n "$remote" ] ; then :
