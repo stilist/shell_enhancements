@@ -57,7 +57,7 @@ git_remote_for_git_flow () {
 
 	git_in_initialized_repo || return 1
 
-	git_remote_exists upstream
+	git_remote_exists "upstream"
 	if [ "$?" -eq "0" ] ; then :
 		case "$branch" in
 			"develop" ) remote="upstream" ;;
