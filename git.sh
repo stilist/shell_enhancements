@@ -27,6 +27,8 @@ autopush () {
 
 # get line count relative to upstream
 branchstat () {
+	git_in_initialized_repo || return 1
+
 	if [ -z "$@" ] ; then :
 		local upstream="master"
 	else
