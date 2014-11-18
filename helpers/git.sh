@@ -49,7 +49,7 @@ git_remote_exists () {
 }
 
 git_remote_for_git_flow () {
-	local branch=$(parse_git_branch)
+	local branch=$(git_current_branch)
 	# default to `"origin"`
 	local remote=
 
