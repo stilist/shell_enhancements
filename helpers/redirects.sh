@@ -5,7 +5,6 @@
 # `echo` all passed arguments to to stderr and exit with error
 echo_error () {
 	echo "$@" 1>&2
-	return 1
 }
 
 redirect_to_null () {
