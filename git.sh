@@ -21,6 +21,7 @@ autopush () {
 		git push "$remote" "$branch"
 	else
 		echo_error "Add a git remote named 'origin'"
+		return 1
 	fi
 }
 

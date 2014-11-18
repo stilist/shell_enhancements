@@ -8,6 +8,7 @@ git_in_repo () {
 		return 0
 	else
 		echo_error "Not in a git repository"
+		return 1
 	fi
 }
 
@@ -43,6 +44,7 @@ git_remote_exists () {
 
 	if [ -z "$@" ] ; then
 		echo_error "Specify a remote"
+		return 1
 	else
 		git remote | redirect_to_null grep "$@"
 	fi
