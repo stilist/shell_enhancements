@@ -109,7 +109,7 @@ push () {
 # (unlike `git branch some_new_branch`)
 #
 # `git checkout` / `git checkout -b`
-switch_b () {
+switch () {
 	git_in_initialized_repo || return 1
 
 	# http://stackoverflow.com/q/5167957/672403
