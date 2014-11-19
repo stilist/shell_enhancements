@@ -2,6 +2,7 @@
 
 . ~/shell_enhancements/helpers/git.sh
 . ~/shell_enhancements/helpers/gitflow.sh
+. ~/shell_enhancements/helpers/github.sh
 . ~/shell_enhancements/helpers/redirects.sh
 
 # Automatically pushes to the appropriate git remote.
@@ -58,11 +59,14 @@ autopr () {
 	else
 		remote="origin"
 	fi
+	local upstream_user=$(github_username_for_remote "$remote")
+	local origin_user=$(github_username_for_remote "origin")
 
 	local branch=$(git_current_branch)
 	local remote_branch=$(gitflow_branch_base "$branch")
 	if [ -n "$remote_branch" ] ; then
-		git pull-request -m "$message" -b "$remote:$remote_branch" -h "origin:$branch"
+		echo "Opening a pull request against $upstream_user:$remote_branch"
+		hub pull-request -m "$message" -b "$upstream_user:$remote_branch" -h "$origin_user:$branch"
 	fi
 }
 
