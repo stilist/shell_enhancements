@@ -27,6 +27,45 @@ autopush () {
 	fi
 }
 
+# Automatically open a GitHub pull request to the appropriate git remote and
+# comparison base.
+#
+# Much like `autopush`, `autopr` assumes git-flow semantics in order to
+# operate: it looks at the current branch name to determine which remote to
+# use. The [`hub`](https://hub.github.com/) tool is used to open a pull request
+# with the appropriate base.
+autopr () {
+	local message=$*
+
+	if [ -z "$message" ] ; then
+		echo_error "A message is required"
+		return 1
+	fi
+
+	git_can_push || return 1
+
+	# need `hub` to use `pull-request` command
+	redirect_to_null hash hub
+	if [ "$?" -ne "0" ] ; then
+		echo_error "You don’t have hub installed: brew install --HEAD hub"
+		return 1
+	fi
+
+	local remote=
+	git_remote_exists "upstream"
+	if [ "$?" -eq "0" ] ; then
+		remote="upstream"
+	else
+		remote="origin"
+	fi
+
+	local branch=$(git_current_branch)
+	local remote_branch=$(gitflow_branch_base "$branch")
+	if [ -n "$remote_branch" ] ; then
+		git pull-request -m "$message" -b "$remote:$remote_branch" -h "origin:$branch"
+	fi
+}
+
 # get line count relative to upstream
 branchstat () {
 	git_in_initialized_repo || return 1
