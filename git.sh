@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . ~/shell_enhancements/helpers/git.sh
+. ~/shell_enhancements/helpers/redirects.sh
 
 # Automatically pushes to the appropriate git remote.
 #
