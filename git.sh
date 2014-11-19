@@ -16,7 +16,7 @@ autopush () {
 	local remote=$(git_remote_for_git_flow)
 
 	git_remote_exists "$remote"
-	if [ "$?" -eq "0" ] ; then :
+	if [ "$?" -eq "0" ] ; then
 		echo "Pushing $branch to $remote"
 		git push "$remote" "$branch"
 	else
@@ -32,13 +32,13 @@ branchstat () {
 	local branch=$(git_current_branch)
 	local upstream=
 
-	if [ -z "$@" ] ; then :
+	if [ -z "$@" ] ; then
 		upstream="master"
 	else
 		upstream=$1
 	fi
 
-	if [ -n "$branch" ] ; then :
+	if [ -n "$branch" ] ; then
 		# http://www.cyberciti.biz/faq/linux-unix-appleosx-bsd-bash-passing-variables-to-awk/
 		#
 		# TODO break into multiple lines
@@ -56,7 +56,7 @@ deploy () {
 	local branch= remote=
 
 	# `deploy to h_prod` (uses current branch)
-	if [ "$1" = "to" ] ; then :
+	if [ "$1" = "to" ] ; then
 		branch=$(git_current_branch)
 		remote=$2
 	# `deploy foo to h_prod`
@@ -65,7 +65,7 @@ deploy () {
 		remote=$3
 	fi
 
-	if [ -n "$remote" ] ; then :
+	if [ -n "$remote" ] ; then
 		git push "$remote" "$branch:master"
 	fi
 }
@@ -77,7 +77,7 @@ pull () {
 	local branch= remote=
 
 	# `pull from h_prod` (uses current branch)
-	if [ "$1" = "from" ] ; then :
+	if [ "$1" = "from" ] ; then
 		branch=$(git_current_branch)
 		remote=$2
 	# `pull master from origin`
@@ -86,7 +86,7 @@ pull () {
 		remote=$3
 	fi
 
-	if [ -n "$remote" ] ; then :
+	if [ -n "$remote" ] ; then
 		git pull "$remote" "$branch"
 	fi
 }
@@ -98,7 +98,7 @@ push () {
 	local branch= remote=
 
 	# `push to h_prod` (uses current branch)
-	if [ "$1" = "to" ] ; then :
+	if [ "$1" = "to" ] ; then
 		branch=$(git_current_branch)
 		remote=$2
 	# `push master to origin`
@@ -108,7 +108,7 @@ push () {
 		remote=$3
 	fi
 
-	if [ -n "$remote" ] ; then :
+	if [ -n "$remote" ] ; then
 		git push "$remote" "$branch"
 	fi
 }
@@ -122,18 +122,18 @@ switch () {
 
 	local branch="$1"
 	# support `switch to foo` in addition to `switch foo`
-	if [ "$branch" = "to" ] ; then :
+	if [ "$branch" = "to" ] ; then
 		branch="$2"
 	fi
 
-	if [ -z "$branch" ] ; then :
+	if [ -z "$branch" ] ; then
 		echo_error "Specify a branch name"
 		return 1
 	fi
 
 	# http://stackoverflow.com/q/5167957/672403
 	git show-ref --verify --quiet "refs/heads/$1"
-	if [ "$?" -eq "0" ] ; then :
+	if [ "$?" -eq "0" ] ; then
 		git checkout "$branch"
 	else
 		git checkout -b "$branch"

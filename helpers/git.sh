@@ -4,7 +4,7 @@
 
 git_in_repo () {
 	redirect_to_null git status -unormal
-	if [ "$?" -eq "0" ] ; then :
+	if [ "$?" -eq "0" ] ; then
 		return 0
 	else
 		echo_error "Not in a git repository"
@@ -31,7 +31,7 @@ git_current_branch () {
 	redirect_to_null git_in_repo || return 1
 
 	git_in_initialized_repo
-	if [ "$?" -ne "0" ] ; then :
+	if [ "$?" -ne "0" ] ; then
 		echo "[new repo]"
 	else
 		# http://stackoverflow.com/a/11958481/672403
