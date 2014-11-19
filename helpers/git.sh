@@ -42,10 +42,11 @@ git_current_branch () {
 git_remote_exists () {
 	git_in_initialized_repo || return 1
 
-	if [ -z "$@" ] ; then
+	local remote=$*
+	if [ -z "$remote" ] ; then
 		echo_error "Specify a remote"
 		return 1
 	else
-		git remote | redirect_to_null grep "$@"
+		git remote | redirect_to_null grep "$remote"
 	fi
 }
