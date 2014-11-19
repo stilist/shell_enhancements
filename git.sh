@@ -49,6 +49,8 @@ branchstat () {
 	fi
 }
 
+# Largely the same as `push`, but automatically pushes to remote `master`.
+#
 # `git push production master`
 # `git push production foo:master`
 deploy () {
@@ -114,8 +116,8 @@ push () {
 	fi
 }
 
-# create branch if it doesn’t exist, and automatically switch to it
-# (unlike `git branch some_new_branch`)
+# Create branch if it doesn’t exist, and automatically switch to it (unlike
+# `git branch some_new_branch`)
 #
 # `git checkout` / `git checkout -b`
 switch () {
