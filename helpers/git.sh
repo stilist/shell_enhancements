@@ -49,24 +49,3 @@ git_remote_exists () {
 		git remote | redirect_to_null grep "$@"
 	fi
 }
-
-git_remote_for_git_flow () {
-	local branch=$(git_current_branch)
-	# default to `"origin"`
-	local remote=
-
-	git_in_initialized_repo || return 1
-
-	git_remote_exists "upstream"
-	if [ "$?" -eq "0" ] ; then :
-		case "$branch" in
-			"develop" ) remote="upstream" ;;
-			hotfix/*  ) remote="upstream" ;;
-			*         ) remote="origin" ;;
-		esac
-	else
-		remote="origin"
-	fi
-
-	echo $remote
-}

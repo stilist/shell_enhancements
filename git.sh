@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . ~/shell_enhancements/helpers/git.sh
+. ~/shell_enhancements/helpers/gitflow.sh
 . ~/shell_enhancements/helpers/redirects.sh
 
 # Automatically pushes to the appropriate git remote.
@@ -14,7 +15,7 @@ autopush () {
 	git_can_push || return 1
 
 	local branch=$(git_current_branch)
-	local remote=$(git_remote_for_git_flow)
+	local remote=$(gitflow_remote "$branch")
 
 	git_remote_exists "$remote"
 	if [ "$?" -eq "0" ] ; then
