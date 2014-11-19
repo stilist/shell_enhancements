@@ -150,11 +150,9 @@ gitflow_remote () {
 	git_remote_exists "upstream"
 	if [ "$?" -eq "0" ] ; then
 		local develop=$(gitflow_prefix "develop")
-		local hotfix=$(gitflow_prefix "hotfix")
 
 		case "$branch" in
 			$develop|master ) remote="upstream" ;;
-			$hotfix*        ) remote="upstream" ;;
 			*               ) remote="origin" ;;
 		esac
 	else
