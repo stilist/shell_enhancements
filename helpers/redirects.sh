@@ -9,5 +9,5 @@ echo_error () {
 
 # Silences stderr and stdout, so the only return is the exit status
 redirect_to_null () {
-	$@ >/dev/null 2>&1
+	"$@" >/dev/null 2>&1
 }
