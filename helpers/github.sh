@@ -14,7 +14,8 @@ github_username_for_remote () {
 
 	# Borrowed from https://github.com/git/git/blob/master/git-parse-remote.sh#L9-L14
 	# (`get_default_remote`)
-	local url=$(git config --get "remote.$remote.url")
+	local url
+	url=$(git config --get "remote.$remote.url")
 	if [ -z "$url" ] ; then
 		echo_error "Invalid remote"
 		return 1
@@ -25,7 +26,8 @@ github_username_for_remote () {
 	#
 	# TODO this is a lousy way of doing things, but grep doesn’t have capture
 	# groups and sed always returns the full match.
-	local username=$(echo "$url" | sed "s/.*://" | sed "s/\/.*//")
+	local username
+	username=$(echo "$url" | sed "s/.*://" | sed "s/\/.*//")
 
 	if [ -z "$username" ] ; then
 		echo_error "Unable to determine username"
