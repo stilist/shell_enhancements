@@ -20,13 +20,14 @@ gitflow_initialized () {
 
 # Gives the default branch prefixes according to gitflow semantics.
 gitflow_default_prefix () {
-	local branch_type=$1
+	local branch_type
+	branch_type=$1
 	if [ -z "$branch_type" ] ; then
 		echo_error "Specify a branch type (e.g. hotfix, release)"
 		return 1
 	fi
 
-	local prefix=
+	local prefix
 
 	case "$branch_type" in
 		develop|master         ) prefix="$branch_type" ;;
@@ -57,21 +58,24 @@ gitflow_default_prefix () {
 # `git-flow` has not been set up for the repo) it falls back to
 # `gitflow_default_prefix`.
 gitflow_prefix () {
-	local branch_type=$1
+	local branch_type
+	branch_type=$1
 	if [ -z "$branch_type" ] ; then
 		echo_error "Specify a branch type (e.g. hotfix, release)"
 		return 1
 	fi
 
-	local prefix=
+	local prefix
 
-	local match=$(git config --get "gitflow.prefix.$branch_type")
+	local match
+	match=$(git config --get "gitflow.prefix.$branch_type")
 	if [ -n "$match" ] ; then
 		prefix="$match"
 	# `develop` and `master` are under `gitflow.branch` instead of
 	# `gitflow.prefix`
-	elif [ "$branch_type" = "develop" -o "$branch_type" = "master" ] ; then
-		local branch=$(git config --get "gitflow.branch.$branch_type")
+	elif [ "$branch_type" = "develop" ] || [ "$branch_type" = "master" ] ; then
+		local branch
+		branch=$(git config --get "gitflow.branch.$branch_type")
 		if [ -z "$branch" ] ; then
 			prefix="$branch"
 		fi
@@ -111,16 +115,19 @@ gitflow_branch_base () {
 		return 1
 	fi
 
-	local base=
+	local base
 
-	local match=$(git config --get "gitflow.branch.$branch.base")
+	local match
+	match=$(git config --get "gitflow.branch.$branch.base")
 	# gitflow has recorded the base
 	if [ -n "$match" ] ; then
 		base="$match"
 	# use defaults
 	else
-		local develop=$(gitflow_prefix "develop")
-		local hotfix=$(gitflow_prefix "hotfix")
+		local develop
+		develop=$(gitflow_prefix "develop")
+		local hotfix
+		hotfix=$(gitflow_prefix "hotfix")
 
 		case "$branch" in
 			$hotfix* ) base="master" ;;
@@ -143,13 +150,14 @@ gitflow_remote () {
 		return 1
 	fi
 
-	local remote=
+	local remote
 
 	git_in_initialized_repo || return 1
 
 	git_remote_exists "upstream"
 	if [ "$?" -eq "0" ] ; then
-		local develop=$(gitflow_prefix "develop")
+		local develop
+		develop=$(gitflow_prefix "develop")
 
 		case "$branch" in
 			$develop|master ) remote="upstream" ;;
