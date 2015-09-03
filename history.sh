@@ -18,8 +18,11 @@ export HISTCONTROL=ignorespace
 export HISTFILESIZE=10000000
 
 # append to history file instead of overwriting
-# note: `shopt` is a Bashism
-shopt -s histappend
+# note: `shopt` is a Bashism, so check for its existence as a shell builtin
+which type
+if [ "$?" -eq "0" ] ; then
+	type shopt | grep "builtin" && shopt -s histappend
+fi
 
 # save history when commands are run, rather than at the end of the session
 export PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
