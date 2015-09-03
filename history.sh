@@ -19,9 +19,9 @@ export HISTFILESIZE=10000000
 
 # append to history file instead of overwriting
 # note: `shopt` is a Bashism, so check for its existence as a shell builtin
-which type
+redirect_to_null which type
 if [ "$?" -eq "0" ] ; then
-	type shopt | grep "builtin" && shopt -s histappend
+	redirect_to_null type shopt | grep "builtin" && shopt -s histappend
 fi
 
 # save history when commands are run, rather than at the end of the session
