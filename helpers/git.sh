@@ -15,7 +15,8 @@ git_in_repo () {
 git_in_initialized_repo () {
 	redirect_to_null git_in_repo || return 1
 
-	local git_status=$(git status -unormal 2>&1)
+	local git_status
+	git_status=$(git status -unormal 2>&1)
 	case "$git_status" in
 		*"Initial commit"* ) return 1 ;;
 		*                  ) return 0 ;;
