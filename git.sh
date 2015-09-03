@@ -15,8 +15,10 @@
 autopush () {
 	git_can_push || return 1
 
-	local branch=$(git_current_branch)
-	local remote=$(gitflow_remote "$branch")
+	local branch
+	branch=$(git_current_branch)
+	local remote
+	remote=$(gitflow_remote "$branch")
 
 	git_remote_exists "$remote"
 	if [ "$?" -eq "0" ] ; then
@@ -52,18 +54,22 @@ autopr () {
 		return 1
 	fi
 
-	local remote=
+	local remote
 	git_remote_exists "upstream"
 	if [ "$?" -eq "0" ] ; then
 		remote="upstream"
 	else
 		remote="origin"
 	fi
-	local upstream_user=$(github_username_for_remote "$remote")
-	local origin_user=$(github_username_for_remote "origin")
+	local upstream_user
+	upstream_user=$(github_username_for_remote "$remote")
+	local origin_user
+	origin_user=$(github_username_for_remote "origin")
 
-	local branch=$(git_current_branch)
-	local remote_branch=$(gitflow_branch_base "$branch")
+	local branch
+	branch=$(git_current_branch)
+	local remote_branch
+	remote_branch=$(gitflow_branch_base "$branch")
 	if [ -n "$remote_branch" ] ; then
 		echo "Opening a pull request against $upstream_user:$remote_branch"
 		hub pull-request -m "$message" -b "$upstream_user:$remote_branch" -h "$origin_user:$branch"
@@ -74,8 +80,9 @@ autopr () {
 branchstat () {
 	git_in_initialized_repo || return 1
 
-	local branch=$(git_current_branch)
-	local upstream=
+	local branch
+	branch=$(git_current_branch)
+	local upstream
 
 	if [ -z "$@" ] ; then
 		upstream="master"
@@ -100,7 +107,8 @@ branchstat () {
 deploy () {
 	git_can_push || return 1
 
-	local branch= remote=
+	local branch
+	local remote
 
 	# `deploy to h_prod` (uses current branch)
 	if [ "$1" = "to" ] ; then
@@ -121,7 +129,8 @@ deploy () {
 pull () {
 	git_can_push || return 1
 
-	local branch= remote=
+	local branch
+	local remote
 
 	# `pull from h_prod` (uses current branch)
 	if [ "$1" = "from" ] ; then
@@ -142,7 +151,8 @@ pull () {
 push () {
 	git_can_push || return 1
 
-	local branch= remote=
+	local branch
+	local remote
 
 	# `push to h_prod` (uses current branch)
 	if [ "$1" = "to" ] ; then
@@ -167,7 +177,8 @@ push () {
 switch () {
 	git_in_initialized_repo || return 1
 
-	local branch="$1"
+	local branch
+	branch="$1"
 	# support `switch to foo` in addition to `switch foo`
 	if [ "$branch" = "to" ] ; then
 		branch="$2"
