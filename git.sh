@@ -125,6 +125,34 @@ deploy () {
 	fi
 }
 
+# `git pull -r origin foo`
+grebase () {
+	git_can_push || return 1
+
+	local branch
+	local remote
+
+	# `grebase origin master`
+	if [ -n "$2" ] ; then
+		branch=$2
+		remote=$1
+	else
+		remote="origin"
+	fi
+
+	if [ -z "$branch" ] ; then
+		# `grebase master`
+		if [ -n "$1" ] ; then
+			branch=$1
+		else
+			branch=$(git_current_branch)
+		# `grebase`
+		fi
+	fi
+
+	git pull -r "$remote" "$branch"
+}
+
 # `git pull`
 pull () {
 	git_can_push || return 1
