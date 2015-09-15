@@ -144,9 +144,9 @@ grebase () {
 		# `grebase master`
 		if [ -n "$1" ] ; then
 			branch=$1
+		# `grebase`
 		else
 			branch=$(git_current_branch)
-		# `grebase`
 		fi
 	fi
 
