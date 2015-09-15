@@ -198,10 +198,11 @@ push () {
 	fi
 }
 
-# Create branch if it doesn’t exist, and automatically switch to it (unlike
-# `git branch some_new_branch`)
+# Check out a branch, creating the branch if it doesn’t already exist.
+# Determines if the branch exists by checking local branches, then known remote
+# branches.
 #
-# `git checkout` / `git checkout -b`
+# `git checkout` / `git checkout -b` / `git checkout -t`
 switch () {
 	git_in_initialized_repo || return 1
 
@@ -218,10 +219,18 @@ switch () {
 	fi
 
 	# http://stackoverflow.com/q/5167957/672403
+	#
+	# Is there a local branch named `$1`?
 	git show-ref --verify --quiet "refs/heads/$1"
 	if [ "$?" -eq "0" ] ; then
 		git checkout "$branch"
 	else
-		git checkout -b "$branch"
+		# Does git know about a remote branch named `$1`?
+		git show-ref --verify --quiet "refs/remotes/origin/$1"
+		if [ "$?" -eq "0" ] ; then
+			git checkout -t "origin/$1"
+		else
+			git checkout -b "$branch"
+		fi
 	fi
 }
