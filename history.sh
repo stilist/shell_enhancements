@@ -23,7 +23,7 @@ export HISTFILESIZE=10000000
 # note: `shopt` is a Bashism, so check for its existence as a shell builtin
 redirect_to_null which type
 if [ "$?" -eq "0" ] ; then
-	redirect_to_null type shopt | grep "builtin" && shopt -s histappend
+	type shopt | grep -q "builtin" && shopt -s histappend
 fi
 
 # save history when commands are run, rather than at the end of the session
