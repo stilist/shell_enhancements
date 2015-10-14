@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. ~/shell_enhancements/helpers/redirects.sh
+
 # https://twitter.com/michaelhoffman/status/639178277786136576
 HOSTNAME="$(hostname)"
 # changes e.g. `foobar.local` to `foobar`
