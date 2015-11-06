@@ -220,8 +220,8 @@ switch () {
 
 	# http://stackoverflow.com/q/5167957/672403
 	#
-	# Is there a local branch named `$1`?
-	git show-ref --verify --quiet "refs/heads/$1"
+	# Is there a local branch named `$branch`?
+	git show-ref --verify --quiet "refs/heads/$branch"
 	if [ "$?" -eq "0" ] ; then
 		git checkout "$branch"
 	else
