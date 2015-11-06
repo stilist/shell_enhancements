@@ -51,3 +51,37 @@ git_remote_exists () {
 		git remote | redirect_to_null grep "$remote"
 	fi
 }
+
+git_try_remote_branch_checkout () {
+	git_in_initialized_repo || return 1
+
+	local remote
+	remote=$1
+	local branch
+	branch=$2
+
+	if [ -z "$remote" ] ; then
+		echo_error "Specify a remote"
+		return 1
+	fi
+
+	if [ -z "$branch" ] ; then
+		echo_error "Specify a branch"
+		return 1
+	fi
+
+	git_remote_exists "$remote"
+	if [ "$?" -eq "1" ] ; then
+		echo_error "Unknown remote"
+		return 1
+	fi
+
+	# Does git know about a branch named `$branch` on `$remote`?
+	git show-ref --verify --quiet "refs/remotes/$remote/$branch"
+	if [ "$?" -eq "0" ] ; then
+		git checkout -t "$remote/$branch"
+	else
+		return 1
+	fi
+}
+
