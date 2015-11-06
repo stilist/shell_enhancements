@@ -225,12 +225,6 @@ switch () {
 	if [ "$?" -eq "0" ] ; then
 		git checkout "$branch"
 	else
-		# Does git know about a remote branch named `$1`?
-		git show-ref --verify --quiet "refs/remotes/origin/$1"
-		if [ "$?" -eq "0" ] ; then
-			git checkout -t "origin/$1"
-		else
-			git checkout -b "$branch"
-		fi
+		git_create_branch_trying_remotes "$branch"
 	fi
 }
