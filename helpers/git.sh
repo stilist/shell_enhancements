@@ -85,3 +85,22 @@ git_try_remote_branch_checkout () {
 	fi
 }
 
+git_create_branch_trying_remotes () {
+	git_in_initialized_repo || return 1
+
+	local branch
+	branch=$1
+
+	if [ -z "$branch" ] ; then
+		echo_error "Specify a branch"
+		return 1
+	fi
+
+	git_try_remote_branch_checkout "upstream" "$branch"
+	if [ "$?" -eq "1" ] ; then
+		git_try_remote_branch_checkout "origin" "$branch"
+		if [ "$?" -eq "1" ] ; then
+			git checkout -b "$branch"
+		fi
+	fi
+}
