@@ -76,6 +76,38 @@ autopr () {
 	fi
 }
 
+# check if the current branch conflicts with the remote branch
+#
+# $ git_conflicts
+# $ git_conflicts foobranch
+#
+# @see http://stackoverflow.com/a/6283843/672403
+git_conflicts () {
+	git_in_initialized_repo || return 1
+
+	local branch
+	if [ -n "$1" ] ; then
+		branch="$1"
+	else
+		branch="$(git_current_branch)"
+	fi
+
+	local remote
+	git_remote_exists "upstream"
+	if [ "$?" -eq "0" ] ; then
+		remote="upstream"
+	else
+		remote="origin"
+	fi
+
+	redirect_to_null git fetch "$remote" "$branch"
+
+	local mergebase
+	mergebase=$(git merge-base FETCH_HEAD "$branch")
+
+	git merge-tree "$mergebase" FETCH_HEAD "$branch" | grep -A3 "changed in both"
+}
+
 # get line count relative to upstream
 branchstat () {
 	git_in_initialized_repo || return 1
@@ -137,17 +169,12 @@ grebase () {
 		branch=$2
 		remote=$1
 	else
+		branch="$1"
 		remote="origin"
 	fi
 
 	if [ -z "$branch" ] ; then
-		# `grebase master`
-		if [ -n "$1" ] ; then
-			branch=$1
-		# `grebase`
-		else
-			branch=$(git_current_branch)
-		fi
+		branch=$(git_current_branch)
 	fi
 
 	git pull -r "$remote" "$branch"
